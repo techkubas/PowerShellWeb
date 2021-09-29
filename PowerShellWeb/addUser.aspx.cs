@@ -17,26 +17,13 @@ namespace PowerShellWeb
     {
         public static string new_imie, new_nazwisko, new_password, ou_list, ou_fullname, manager_list, title, department, department_number, number, id, manager_name, manager_fullname, ou_name, username, password, ou_number, manager_number;
         public string donor_nazwisko, donor_number, reciver_nazwisko, reciver_number, deleted_index, deleted_surname;
-        public string new_title, new_department, new_department_number;
+        public static string new_title, new_department, new_department_number, new_number, new_id, ListBoxOu;
 
 
         protected void Page_Load(object sender, EventArgs e)
         {
 
         }
-
-        [WebMethod]
-        public static Hashtable firstF(string new_imie, string new_nazwisko, string new_password)
-        {
-            return getDate(new_imie, new_nazwisko, new_password);
-        }
-
-        [WebMethod]
-        public static Hashtable SecondF(string new_title, string new_department, string new_department_number)
-        {
-            return GetDate2(new_title, new_department, new_department_number);
-        }
-
         private static void RunScript(string script)
         {
             Runspace runspace = RunspaceFactory.CreateRunspace();
@@ -47,31 +34,35 @@ namespace PowerShellWeb
             runspace.Close();
         }
 
-        private static Hashtable GetDate2(string new_title, string new_department, string new_department_number)
+        [WebMethod]
+        public static Hashtable firstF(string new_imie, string new_nazwisko, string new_password)
+        {
+            return GetDate1(new_imie, new_nazwisko, new_password);
+        }
+
+        [WebMethod]
+        public static Hashtable secondF(string new_title, string new_department, string new_department_number)
+        {
+            return GetDate2(new_title, new_department, new_department_number);
+        }
+
+        [WebMethod]
+        public static Hashtable thirdF(string new_number, string new_id)
+        {
+            return GetDate3(new_number, new_id);
+        }
+
+        [WebMethod]
+        public static string fourF()
+        {
+            return GetDate4();
+        }
+
+
+        private static Hashtable GetDate1(string new_imie, string new_nazwisko, string new_password)
         {
             Hashtable ht_out = new Hashtable();
             ht_out.Add("panel2", false);
-            ht_out.Add("info", "");
-            title = '"' + new_title + '"';
-            department = '"' + new_department + '"';
-            department_number = '"' + new_department_number + '"';
-            Regex rgx = new Regex(@"^[0-9]{3}-[0-9]{2}$");
-            if (rgx.IsMatch(new_department_number))
-            {
-                ht_out["panel2"] = true;
-            }
-            else
-            {
-                //MessageBox.Show("Numer MPK jest nieprawidłowy, format prawidłowego numeru xxx-xx");
-                ht_out["info"] = "Numer MPK jest nieprawidłowy, format prawidłowego numeru xxx-xx";
-            }
-            return ht_out;
-        }
-
-        private static Hashtable getDate(string new_imie, string new_nazwisko, string new_password)
-        {
-            Hashtable ht_out = new Hashtable();
-            ht_out.Add("panel", false);
             ht_out.Add("info", "");
             string dane_out = "";
             string imie = '"' + new_imie + '"';
@@ -87,47 +78,24 @@ namespace PowerShellWeb
             switch (results)
             {
                 case "0":
-                    // ReqAtrib.Visible = true;
-                    ht_out["panel"] = true;
+                    ht_out["panel2"] = true;
                     ht_out["info"] = "OK";
                     break;
 
                 case "1":
                     ht_out["info"] = "Takie konto istnieje (imię.nazwisko).";
-                    //DialogResult dialogResult = MessageBox.Show("Użytkownik o podanych danych już istnieje, czy chesz go edytować?", "Eekum bokum", MessageBoxButtons.YesNo);
-                    //if (dialogResult == DialogResult.Yes)
-                    //{
-                    //    current_page = 7;
-                    //    load_user_data();
-                    //    Page_switcher(current_page);
-                    //}
-                    //else if (dialogResult == DialogResult.No)
-                    //{
-                    //    //もぐもぐ
-                    //}
                     break;
 
                 case "2":
                     ht_out["info"] = "Takie konto istnieje (inicjał.nazwisko).";
-                    //DialogResult dialogResult = MessageBox.Show("Użytkownik o podanych danych już istnieje, czy chesz go edytować?", "Eekum bokum", MessageBoxButtons.YesNo);
-                    //if (dialogResult == DialogResult.Yes)
-                    //{
-                    //    current_page = 7;
-                    //    load_user_data();
-                    //    Page_switcher(current_page);
-                    //}
-                    //else if (dialogResult == DialogResult.No)
-                    //{
-                    //    //もぐもぐ
-                    //}
                     break;
 
                 case "3":
-                    ht_out["info"] = "Takie konto istnieje (imię.nazwisko). Hasło nie spełnia minimalnych wymagań.";
+                    ht_out["info"] = "Takie konto istnieje (imię.nazwisko).<br> Hasło nie spełnia minimalnych wymagań.";
                     break;
 
                 case "4":
-                    ht_out["info"] = "Takie konto istnieje (inicjał.nazwisko). Hasło nie spełnia minimlanych wymagań.";
+                    ht_out["info"] = "Takie konto istnieje (inicjał.nazwisko).<br> Hasło nie spełnia minimlanych wymagań.";
                     break;
 
                 case "5":
@@ -138,93 +106,59 @@ namespace PowerShellWeb
             return ht_out;
         }
 
-        protected void Button1_Click(object sender, EventArgs e)
+        private static Hashtable GetDate2(string new_title, string new_department, string new_department_number)
         {
-            new_imie = new_imie_textbox.Text;
-            new_nazwisko = new_nazwisko_textbox.Text;
-            new_password = new_password_textbox.Text;
-            string imie = '"' + new_imie + '"';
-            string nazwisko = '"' + new_nazwisko + '"';
-            string password = '"' + new_password + '"';
-            string plik = (HttpContext.Current.Request.PhysicalApplicationPath + "\\App_Code\\Skrypty\\new_user_name_check.ps1");
-            string script = File.ReadAllText(plik);
-            string resultPath = Path.GetDirectoryName(HttpContext.Current.Request.PhysicalApplicationPath + "\\App_Code\\Skrypty");
-            string script_edited = script.Replace("$input1", imie).Replace("$input2", nazwisko).Replace("$input3", password).Replace("$input4", resultPath);
-            RunScript(script_edited);
-            string results = File.ReadAllText(resultPath+"\\result.txt");
-            switch (results)
-            {
-                case "0":
-                    ReqAtrib.Visible = true;
-                    break;
-
-                case "1":
-                    Response.Write("<script language=javascript>alert('Takie konto istnieje (imię.nazwisko).')</script>");
-                    //DialogResult dialogResult = MessageBox.Show("Użytkownik o podanych danych już istnieje, czy chesz go edytować?", "Eekum bokum", MessageBoxButtons.YesNo);
-                    //if (dialogResult == DialogResult.Yes)
-                    //{
-                    //    current_page = 7;
-                    //    load_user_data();
-                    //    Page_switcher(current_page);
-                    //}
-                    //else if (dialogResult == DialogResult.No)
-                    //{
-                    //    //もぐもぐ
-                    //}
-                    break;
-
-                case "2":
-                    Response.Write("<script language=javascript>alert('Takie konto istnieje (inicjał.nazwisko).')</script>");
-                    //DialogResult dialogResult = MessageBox.Show("Użytkownik o podanych danych już istnieje, czy chesz go edytować?", "Eekum bokum", MessageBoxButtons.YesNo);
-                    //if (dialogResult == DialogResult.Yes)
-                    //{
-                    //    current_page = 7;
-                    //    load_user_data();
-                    //    Page_switcher(current_page);
-                    //}
-                    //else if (dialogResult == DialogResult.No)
-                    //{
-                    //    //もぐもぐ
-                    //}
-                    break;
-
-                case "3":
-                    Response.Write("<script language=javascript>alert('Takie konto istnieje (imię.nazwisko). Hasło nie spełnia minimalnych wymagań.')</script>");
-                    break;
-
-                case "4":
-                    Response.Write("<script language=javascript>alert('Takie konto istnieje (inicjał.nazwisko). Hasło nie spełnia minimlanych wymagań.')</script>");
-                    break;
-
-                case "5":
-                    Response.Write("<script language=javascript>alert('Hasło nie spełnia minimalnych wymagań.')</script>");
-                    break;
-            }
-
-        }
-        protected void Button2_Click(object sender, EventArgs e)
-        {
-            new_title = title_textbox.Text;
-            new_department = department_textbox.Text;
-            new_department_number = department_number_textbox.Text;
-            string title = '"' + new_title + '"';
-            string department = '"' + new_department + '"';
-            string department_number = '"' + new_department_number + '"';
+            Hashtable ht_out = new Hashtable();
+            ht_out.Add("panel3", false);
+            ht_out.Add("info", "");
+            title = '"' + new_title + '"';
+            department = '"' + new_department + '"';
+            department_number = '"' + new_department_number + '"';
             Regex rgx = new Regex(@"^[0-9]{3}-[0-9]{2}$");
-            if (rgx.IsMatch(department_number))
+            if (rgx.IsMatch(new_department_number))
             {
-                optional_atributes_panel.Visible = true;
+                ht_out["panel3"] = true;
             }
             else
             {
-                //MessageBox.Show("Numer MPK jest nieprawidłowy, format prawidłowego numeru xxx-xx");
-                Response.Write("<script language=javascript>alert('Numer MPK jest nieprawidłowy, format prawidłowego numeru xxx-xx')</script>");
+                ht_out["info"] = "Numer MPK jest nieprawidłowy, format prawidłowego numeru xxx-xx";
             }
+            return ht_out;
         }
-
-        protected void Button3_Click(object sender, EventArgs e)
+        
+        private static Hashtable GetDate3(string new_number, string new_id)
         {
-
+            Hashtable ht_out = new Hashtable();
+            ht_out.Add("panel1", false);
+            ht_out.Add("panel4", false);
+            number = '"' + new_number + '"';
+            id = '"' + new_id + '"';
+            return ht_out;
+        }
+        [WebMethod]
+        public static string GetDate4()
+        {
+            //Hashtable ht_out = new Hashtable();
+            string plik = (HttpContext.Current.Request.PhysicalApplicationPath + "\\App_Code\\Skrypty\\ou_search.ps1");
+            string script = File.ReadAllText(plik);
+            string resultPath = Path.GetDirectoryName(HttpContext.Current.Request.PhysicalApplicationPath + "\\App_Code\\Skrypty");
+            string edited_script = script.Replace("$input4", resultPath);
+            RunScript(edited_script);
+            string ou_list = File.ReadAllText(resultPath + "\\result2.txt");
+            StringReader strReader = new StringReader(ou_list);
+            int i = 0;
+            string result = "";
+            while (true)
+            {
+                string temp = strReader.ReadLine();
+                if (temp != null)
+                {
+                    result += $"<option text='{temp.Trim()}' value='{i}'>{temp.Trim()}</option>";
+                }
+                else { break; }
+            }
+            File.Delete("result2.txt");
+            return result;
         }
     }
 }

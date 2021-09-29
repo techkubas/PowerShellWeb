@@ -10,63 +10,92 @@
     <script src="Styles/alertify.js"></script>
     <link href="Styles/css/alertify.css" rel="stylesheet" />
     <style type="text/css">
-       .ReqAtrib{
-           display:none;
-       }
-        .optional_atributes_panel{
+
+        .SecondPanel{
             display:none;
         }
+        .ThirdPanel{
+            display:none;
+        }
+        .FourPanel{
+            display:none;
+        }
+
     </style>
     <script type="text/javascript">
-        function Test() {
+        function Check1() {
             var name = $(".new_imie_textbox").val();
-          // alert("Test " + name);
             PageMethods.firstF(name, $(".new_nazwisko_textbox").val(), $(".new_password_textbox").val(), OnOK, null);
         }
 
         function Check2() {
             var name = $(".title_textbox").val();
-            PageMethods.SecondF(name, $(".department_textbox").val(), $(".department_number_textbox").val(), OnOK2, null);
+            PageMethods.secondF(name, $(".department_textbox").val(), $(".department_number_textbox").val(), OnOK2, null);
+        }
+
+        function Check3() {
+            var name = $(".id_textbox").val();
+            PageMethods.thirdF(name, $(".number_textbox").val(), OnOK3, null);
+        }
+
+        function Check4(obj) {
+            alert(obj.text());
+        }
+
+        //document.getElementById('s_test')
+        $('select option').dblclick(function () {
+            //var evt = window.event || e;
+            //var elem = evt.srcElement || evt.target;
+            alert(this.outerHTML);
+        });
+
+
+        function OnOK(result) {
+            if (result.panel2)
+                $('.SecondPanel').show();
+            else {
+                $('.SecondPanel').hide();
+                alertify.alert('Uwaga', result.info);
+            }
         }
 
         function OnOK2(result){
-            if (result.panel2)
-                $('.optional_atributes_panel').show();
-            else
-                $('.optional_atributes_panel').hide();
-        }
-
-        function OnOK(result) {
-            if (result.panel)
-                $('.ReqAtrib').show();
+            if (result.panel3)
+                $('.ThirdPanel').show();
             else {
-                $('.ReqAtrib').hide();
-                //alert(result.info);
-                //alertify.alert('Info', result.info);
-                alertify.confirm("This is a confirm dialog.",
-                    function () {
-                        alertify.success('Ok');
-                    },
-                    function () {
-                        alertify.error('Cancel');
-                    }).set({
-                        labels: {
-                            ok: "Tak"
-                        }
-                    });
+                $('.ThirdPanel').hide();
+                alertify.alert('Uwaga', result.info);
             }
-           
-
         }
+
+        function OnOK3(result) {
+            if (result.panel4) {
+                $('.FourPanel').hide();
+            }
+            else {
+                $('.FirstPanel').hide();
+                $('.SecondPanel').hide();
+                $('.ThirdPanel').hide();
+                $('.FourPanel').show();
+                PageMethods.GetDate4(date4OK);
+
+            }
+        }
+
+        function date4OK(result) {
+            $('#s_test').append(result);
+        }
+
     </script>
 </head>
 <body>
     <form id="form1" runat="server">
         <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="True" EnableScriptGlobalization="True"></asp:ScriptManager>
         <div>
-            <asp:Label ID="Main_label" runat="server" Text="Wprowadź dane tworzonego użytkownika"></asp:Label>
         </div>
-        <asp:Panel ID="Panel1" runat="server">
+
+        <asp:Panel ID="FirstPanel" runat="server" CssClass="FirstPanel">
+            <asp:Label ID="Main_label" runat="server" Text="Wprowadź dane tworzonego użytkownika"></asp:Label>
             <table style="width:100%;">
                 <tr>
                     <td><asp:Label ID="Label1" runat="server" Text="Imię"></asp:Label></td>
@@ -81,10 +110,10 @@
                     <td><asp:TextBox ID="new_password_textbox" CssClass="new_password_textbox" runat="server" TextMode="Password"></asp:TextBox></td>
                 </tr>
             </table>
-            <%-- <asp:Button ID="Button1" runat="server" Text="Dalej"  OnClick="Button1_Click"/> --%>
-            <input id="Button4" type="button" value="Sprawdź" onclick="Test()"/>
+            <input id="Button1" type="button" value="Sprawdź" onclick="Check1()"/>
         </asp:Panel>
-        <asp:Panel ID="ReqAtrib" runat="server" Visible="True" CssClass="ReqAtrib" >
+
+        <asp:Panel ID="SecondPanel" runat="server" Visible="True" CssClass="SecondPanel" >
             <table style="width: 100%;">
                 <tr>
                     <td><asp:Label ID="Label4" runat="server" Text="Tytuł"></asp:Label></td>
@@ -99,21 +128,26 @@
                     <td><asp:TextBox ID="department_number_textbox" CssClass="department_number_textbox" runat="server"></asp:TextBox></td>
                 </tr>
             </table>
-            <%-- <asp:Button ID="Button2" runat="server" Text="Dalej" OnClick="Button2_Click"/> --%>
-            <input id="Button5" type="button" value="Dalej" onclick="Check2()"/>
+            <input id="Button2" type="button" value="Dalej" onclick="Check2()"/>
         </asp:Panel>
-        <asp:Panel ID="optional_atributes_panel" runat="server"  CssClass="optional_atributes_panel">
+
+        <asp:Panel ID="ThirdPanel" runat="server"  CssClass="ThirdPanel">
             <table style="width: 100%;">
                 <tr>
                     <td><asp:Label ID="Label7" runat="server" Text="Numer karty"></asp:Label></td>
-                    <td><asp:TextBox ID="card_number_textbox" runat="server"></asp:TextBox></td>
+                    <td><asp:TextBox ID="id_textbox" runat="server" CssClass="id_textbox"></asp:TextBox></td>
                 </tr>
                 <tr>
                     <td><asp:Label ID="Label8" runat="server" Text="Numer pracownika"></asp:Label></td>
-                    <td><asp:TextBox ID="worker_number_textbox" runat="server"></asp:TextBox></td>
+                    <td><asp:TextBox ID="number_textbox" runat="server" CssClass="number_textbox"></asp:TextBox></td>
                 </tr>
             </table>
-            <asp:Button ID="Button3" runat="server" Text="Dalej" OnClick="Button3_Click"/>
+            <input id="Button3" type="button" value="Dalej" onclick="Check3()"/>
+        </asp:Panel>
+
+        <asp:Panel ID="FourPanel" runat="server" CssClass="FourPanel">
+            <asp:Label ID="Label9" runat="server" Text="Wybierz właściwe OU"></asp:Label><br />
+            <select id="s_test" style="width:300px;height:300px" size="2" <%--ondblclick="Check4(this)"--%>></select>
         </asp:Panel>
     </form>
 </body>

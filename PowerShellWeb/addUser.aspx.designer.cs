@@ -33,6 +33,15 @@ namespace PowerShellWeb
         protected global::System.Web.UI.ScriptManager ScriptManager1;
 
         /// <summary>
+        /// Kontrolka FirstPanel.
+        /// </summary>
+        /// <remarks>
+        /// Pole generowane automatycznie.
+        /// By zmodyfikować deklaracje pola przenieś ją z pliku projektanta do pliku codebehind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel FirstPanel;
+
+        /// <summary>
         /// Kontrolka Main_label.
         /// </summary>
         /// <remarks>
@@ -40,15 +49,6 @@ namespace PowerShellWeb
         /// By zmodyfikować deklaracje pola przenieś ją z pliku projektanta do pliku codebehind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label Main_label;
-
-        /// <summary>
-        /// Kontrolka Panel1.
-        /// </summary>
-        /// <remarks>
-        /// Pole generowane automatycznie.
-        /// By zmodyfikować deklaracje pola przenieś ją z pliku projektanta do pliku codebehind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel Panel1;
 
         /// <summary>
         /// Kontrolka Label1.
@@ -105,13 +105,13 @@ namespace PowerShellWeb
         protected global::System.Web.UI.WebControls.TextBox new_password_textbox;
 
         /// <summary>
-        /// Kontrolka ReqAtrib.
+        /// Kontrolka SecondPanel.
         /// </summary>
         /// <remarks>
         /// Pole generowane automatycznie.
         /// By zmodyfikować deklaracje pola przenieś ją z pliku projektanta do pliku codebehind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel ReqAtrib;
+        protected global::System.Web.UI.WebControls.Panel SecondPanel;
 
         /// <summary>
         /// Kontrolka Label4.
@@ -168,13 +168,13 @@ namespace PowerShellWeb
         protected global::System.Web.UI.WebControls.TextBox department_number_textbox;
 
         /// <summary>
-        /// Kontrolka optional_atributes_panel.
+        /// Kontrolka ThirdPanel.
         /// </summary>
         /// <remarks>
         /// Pole generowane automatycznie.
         /// By zmodyfikować deklaracje pola przenieś ją z pliku projektanta do pliku codebehind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel optional_atributes_panel;
+        protected global::System.Web.UI.WebControls.Panel ThirdPanel;
 
         /// <summary>
         /// Kontrolka Label7.
@@ -186,13 +186,13 @@ namespace PowerShellWeb
         protected global::System.Web.UI.WebControls.Label Label7;
 
         /// <summary>
-        /// Kontrolka card_number_textbox.
+        /// Kontrolka id_textbox.
         /// </summary>
         /// <remarks>
         /// Pole generowane automatycznie.
         /// By zmodyfikować deklaracje pola przenieś ją z pliku projektanta do pliku codebehind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox card_number_textbox;
+        protected global::System.Web.UI.WebControls.TextBox id_textbox;
 
         /// <summary>
         /// Kontrolka Label8.
@@ -204,21 +204,30 @@ namespace PowerShellWeb
         protected global::System.Web.UI.WebControls.Label Label8;
 
         /// <summary>
-        /// Kontrolka worker_number_textbox.
+        /// Kontrolka number_textbox.
         /// </summary>
         /// <remarks>
         /// Pole generowane automatycznie.
         /// By zmodyfikować deklaracje pola przenieś ją z pliku projektanta do pliku codebehind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox worker_number_textbox;
+        protected global::System.Web.UI.WebControls.TextBox number_textbox;
 
         /// <summary>
-        /// Kontrolka Button3.
+        /// Kontrolka FourPanel.
         /// </summary>
         /// <remarks>
         /// Pole generowane automatycznie.
         /// By zmodyfikować deklaracje pola przenieś ją z pliku projektanta do pliku codebehind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button3;
+        protected global::System.Web.UI.WebControls.Panel FourPanel;
+
+        /// <summary>
+        /// Kontrolka Label9.
+        /// </summary>
+        /// <remarks>
+        /// Pole generowane automatycznie.
+        /// By zmodyfikować deklaracje pola przenieś ją z pliku projektanta do pliku codebehind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label9;
     }
 }
