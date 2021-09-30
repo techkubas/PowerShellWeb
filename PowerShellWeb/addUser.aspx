@@ -20,6 +20,9 @@
         .FourPanel{
             display:none;
         }
+        .FivePanel{
+            display:none;
+        }
 
     </style>
     <script type="text/javascript">
@@ -38,16 +41,24 @@
             PageMethods.thirdF(name, $(".number_textbox").val(), OnOK3, null);
         }
 
-        function Check4(obj) {
-            alert(obj.text());
+        function Check4() {
+            //var name = $(".").val();
+            //PageMethods.fourF(name, OnOK4, null);
+            $('.FourPanel').hide();
+            $('.FivePanel').show();
         }
 
-        //document.getElementById('s_test')
-        $('select option').dblclick(function () {
-            //var evt = window.event || e;
-            //var elem = evt.srcElement || evt.target;
-            alert(this.outerHTML);
-        });
+        function Search() {
+            var name = $(".Menedzer_textbox").val();
+            PageMethods.fiveF(name, date5OK);
+        }
+
+        function Check5() {
+        
+        }
+
+
+
 
 
         function OnOK(result) {
@@ -83,7 +94,38 @@
         }
 
         function date4OK(result) {
-            $('#s_test').append(result);
+            $('#OuSelect').append(result);
+        }
+
+        function changeFuncOu(OuValue) {
+            alertify.alert('Wybrane OU: ', OuValue);
+            PageMethods.OuSave(OuValue);
+        }
+
+        function OnOK4(result) {
+            if (result.panel5) {
+                $('.FivePanel').hide();
+            }
+            else {
+                $('.FourPanel').hide();
+                $('.FivePanel').show();
+                //PageMethods.GetDate5(date5OK);
+            }
+        }
+
+        function date5OK(result) {
+            $('#MenedzerSelect').append(result.options);
+            $('#i_title').val(result.title);
+        }
+
+        function changeFuncMenedzer(MenedzerValue) {
+            alertify.alert('Wybrany menedżer: ', MenedzerValue);
+            //PageMethods
+        }
+
+        function Check10(manager_name) {
+            $('#manager_namee').append(manager_name);
+            alertify.alert("test menadzera: ", manager_namee);
         }
 
     </script>
@@ -147,8 +189,27 @@
 
         <asp:Panel ID="FourPanel" runat="server" CssClass="FourPanel">
             <asp:Label ID="Label9" runat="server" Text="Wybierz właściwe OU"></asp:Label><br />
-            <select id="s_test" style="width:300px;height:300px" size="2" <%--ondblclick="Check4(this)"--%>></select>
+            <select id="OuSelect" style="width:300px;height:300px" size="2"  onclick="changeFuncOu(value)"></select><br />
+            <input id="Button4" type="button" value="Dalej" onclick="Check4()"/>
         </asp:Panel>
+
+        <asp:Panel ID="FivePanel" runat="server" CssClass="FivePanel">
+            <%--<h1>Ou: <script>window.alert(ou_name);</script></h1>--%>
+            <asp:Label ID="Label10" runat="server" Text="Wpisz nazwisko menedżera"></asp:Label><br />
+            <asp:TextBox ID="Menedzer_textbox" runat="server" CssClass="Menedzer_textbox"></asp:TextBox>
+            <input id="Button5" type="button" value="Szukaj" onclick="Search()"/><br />
+            <select id="MenedzerSelect" style="width:300px;height:300px" size="2"  onclick="changeFuncMenedzer(value)" cssclass="MenedzerSelect"></select><br />
+            <input id="i_title" type="text" />
+            <input id="manager_namee" type="button" value="Check OU" onclick="Check10()"/>
+            <input id="Button6" type="button" value="Dalej" onclick="Check5()"/>
+        </asp:Panel>
+
+        <%--<asp:Panel ID="FinalPanel" runat="server" CssClass="FinalPanel">
+            <asp:Label ID="Label11" runat="server" Text="Wpisz nazwisko menedżera"></asp:Label><br />
+            <asp:TextBox ID="TextBox1" runat="server" CssClass="Menedzer_textbox"></asp:TextBox>
+            <select id="MenedzerSelectac" style="width:300px;height:300px" size="2"  onclick="changeFuncMenedzer(value)" cssclass="MenedzerSelect"></select><br />
+            <input id="Button21" type="button" value="Dalej" onclick="Check6()"/>
+        </asp:Panel>--%>
     </form>
 </body>
 </html>

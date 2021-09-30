@@ -19,6 +19,10 @@ namespace PowerShellWeb
         public string donor_nazwisko, donor_number, reciver_nazwisko, reciver_number, deleted_index, deleted_surname;
         public static string new_title, new_department, new_department_number, new_number, new_id, ListBoxOu;
 
+        //public static string t_title
+        //{
+        //    set; get;
+        //}
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -58,6 +62,23 @@ namespace PowerShellWeb
             return GetDate4();
         }
 
+        [WebMethod]
+        public static Hashtable fiveF(string manager_name)
+        {
+            return GetDate5(manager_name);
+        }
+
+        [WebMethod]
+        public static void OuSave(string OuValue)
+        {
+            ou_fullname = OuValue;
+        }
+
+        //[WebMethod]
+        //public static void MenedzerSearch(string menedzer_name_search)
+        //{
+        //    manager_name = menedzer_name_search;
+        //}
 
         private static Hashtable GetDate1(string new_imie, string new_nazwisko, string new_password)
         {
@@ -65,9 +86,9 @@ namespace PowerShellWeb
             ht_out.Add("panel2", false);
             ht_out.Add("info", "");
             string dane_out = "";
-            string imie = '"' + new_imie + '"';
-            string nazwisko = '"' + new_nazwisko + '"';
-            string password = '"' + new_password + '"';
+            string imie = "\"" + new_imie + "\"";
+            string nazwisko = "\"" + new_nazwisko + "\"";
+            string password = "\"" + new_password + "\"";
             string plik = (HttpContext.Current.Request.PhysicalApplicationPath + "\\App_Code\\Skrypty\\new_user_name_check.ps1");
             string script = File.ReadAllText(plik);
             string resultPath = Path.GetDirectoryName(HttpContext.Current.Request.PhysicalApplicationPath + "\\App_Code\\Skrypty");
@@ -106,14 +127,15 @@ namespace PowerShellWeb
             return ht_out;
         }
 
-        private static Hashtable GetDate2(string new_title, string new_department, string new_department_number)
+        private static Hashtable GetDate2(string new_title1, string new_department, string new_department_number)
         {
             Hashtable ht_out = new Hashtable();
             ht_out.Add("panel3", false);
             ht_out.Add("info", "");
-            title = '"' + new_title + '"';
-            department = '"' + new_department + '"';
-            department_number = '"' + new_department_number + '"';
+            title = "\"" + new_title1 + "\"";
+            HttpContext.Current.Session["t_title"] = new_title1;
+            department = "\"" + new_department + "\"";
+            department_number = "\"" + new_department_number + "\"";
             Regex rgx = new Regex(@"^[0-9]{3}-[0-9]{2}$");
             if (rgx.IsMatch(new_department_number))
             {
@@ -131,8 +153,9 @@ namespace PowerShellWeb
             Hashtable ht_out = new Hashtable();
             ht_out.Add("panel1", false);
             ht_out.Add("panel4", false);
-            number = '"' + new_number + '"';
-            id = '"' + new_id + '"';
+            ht_out.Add("panel5", false);
+            number = "\"" + new_number + "\"";
+            id = "\"" + new_id + "\"";
             return ht_out;
         }
         [WebMethod]
@@ -146,19 +169,53 @@ namespace PowerShellWeb
             RunScript(edited_script);
             string ou_list = File.ReadAllText(resultPath + "\\result2.txt");
             StringReader strReader = new StringReader(ou_list);
-            int i = 0;
+            //int i = 0;
             string result = "";
             while (true)
             {
                 string temp = strReader.ReadLine();
                 if (temp != null)
                 {
-                    result += $"<option text='{temp.Trim()}' value='{i}'>{temp.Trim()}</option>";
+                    result += $"<option text='{temp.Trim()}' value='{temp.Trim()}'>{temp.Trim()}</option>";
+                    //i++;
                 }
                 else { break; }
             }
+            ou_name = ou_fullname;
             File.Delete("result2.txt");
             return result;
+        }
+
+        [WebMethod]
+        private static Hashtable GetDate5(string manager_name)
+        {
+            Hashtable ht_out = new Hashtable();
+            ht_out.Add("title", Convert.ToString(HttpContext.Current.Session["t_title"]));
+            //Manager_listbox.Items.Clear();
+            //string manager_name = manager_textbox.Text;
+            manager_name = "\"" + manager_name + "\"";
+            string plik = (HttpContext.Current.Request.PhysicalApplicationPath + "\\App_Code\\Skrypty\\manager_search.ps1");
+            string script = File.ReadAllText(plik);
+            string resultPath = Path.GetDirectoryName(HttpContext.Current.Request.PhysicalApplicationPath + "\\App_Code\\Skrypty");
+            string edited_script = script.Replace("$input1", manager_name).Replace ("$input4", resultPath);
+            RunScript(edited_script);
+            string manager_list = File.ReadAllText(resultPath + "\\result3.txt");
+            StringReader strReader = new StringReader(manager_list);
+            //int i = 0;
+            string result = "";
+            while (true)
+            {
+                string temp = strReader.ReadLine();
+                if (temp != null)
+                {
+                    result += $"<option text='{temp.Trim()}' value='{temp.Trim()}'>{temp.Trim()}</option>";
+                    //i++;
+                }
+                else { break; }
+            }
+            File.Delete("result3.txt");
+            ht_out.Add("options", result);
+            return ht_out;
         }
     }
 }
