@@ -85,7 +85,7 @@ namespace PowerShellWeb
             Hashtable ht_out = new Hashtable();
             ht_out.Add("panel2", false);
             ht_out.Add("info", "");
-            string dane_out = "";
+            //string dane_out = "";
             string imie = "\"" + new_imie + "\"";
             string nazwisko = "\"" + new_nazwisko + "\"";
             string password = "\"" + new_password + "\"";
